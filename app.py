@@ -99,12 +99,38 @@ with st.sidebar.form("stock_form", clear_on_submit=True):
     )
     st.rerun()
 
-# Main Section: Display Stock Table
+# Main Section: Display Stock Table & Total Summary
 st.subheader("Current Stock Table")
 
 stock_data = load_data()
 
 if not stock_data.empty:
   st.dataframe(stock_data, use_container_width=True)
+
+  # Calculate Total Inventory Amount
+  if (
+      "QUANTITY" in stock_data.columns
+      and "PURCHASE PRICE" in stock_data.columns
+      and "SELL PRICE" in stock_data.columns
+  ):
+    stock_data["TOTAL PURCHASE"] = (
+        stock_data["QUANTITY"] * stock_data["PURCHASE PRICE"]
+    )
+    stock_data["TOTAL SELL"] = stock_data["QUANTITY"] * stock_data["SELL PRICE"]
+
+    total_items = stock_data["QUANTITY"].sum()
+    total_buy_amount = stock_data["TOTAL PURCHASE"].sum()
+    total_sell_amount = stock_data["TOTAL SELL"].sum()
+
+    st.markdown("---")
+    st.subheader("Stock Summary")
+
+    col1, col2, col3 = st.columns(3)
+    with col1:
+      st.metric(label="Total Items (Quantity)", value=f"{total_items}")
+    with col2:
+      st.metric(label="Total Purchase Value", value=f"BDT {total_buy_amount:,.2f}")
+    with col3:
+      st.metric(label="Total Sell Value", value=f"BDT {total_sell_amount:,.2f}")
 else:
   st.info("No stock data found. Use the sidebar to add products.")
