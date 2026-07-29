@@ -2,8 +2,8 @@ import os
 import pandas as pd
 import streamlit as st
 
-# Page Configuration
-st.set_page_config(page_title="Alpha Wear - Stock Management", layout="wide")
+# Page Configuration (Optimized for Mobile & Standard screens)
+st.set_page_config(page_title="Alpha Wear - Stock Management")
 
 st.title("Alpha Wear - Stock Management System")
 st.markdown("---")
@@ -127,10 +127,11 @@ if not stock_data.empty:
 
     col1, col2, col3 = st.columns(3)
     with col1:
-      st.metric(label="Total Items (Quantity)", value=f"{total_items}")
+      st.metric(label="Total Items", value=f"{total_items}")
     with col2:
-      st.metric(label="Total Purchase Value", value=f"BDT {total_buy_amount:,.2f}")
+      st.metric(label="Purchase Value", value=f"BDT {total_buy_amount:,.2f}")
     with col3:
-      st.metric(label="Total Sell Value", value=f"BDT {total_sell_amount:,.2f}")
+      st.metric(label="Sell Value", value=f"BDT {total_sell_amount:,.2f}")
 else:
   st.info("No stock data found. Use the sidebar to add products.")
+
